@@ -8,6 +8,7 @@ const Table = ({ coinsData }) => {
     const [rangeNumber, setRangeNumber] = useState(100)
     const [orderBy, setOrderBy] = useState("")
     const showStable = useSelector((state) => state.stableReducer)
+    const showList = useSelector((state) => state.listReducer)
 
     const tableHeader = ["Prix", "MarketCap", "Volume", "1h", "1j", "1s", "1m", "6m", "1a", "ATH"]
 
@@ -77,6 +78,16 @@ const Table = ({ coinsData }) => {
 
             {coinsData && coinsData
                 .slice(0, rangeNumber)
+                .filter((coin) => {
+                    if (showList) {
+                        let list = window.localStorage.coinList.split(",")
+                        if (list.includes(coin.id)) {
+                            return coin
+                        }
+                    } else {
+                        return coin
+                    }
+                })
                 .filter((coin) => {
                     if (showStable) {
                         return coin;
